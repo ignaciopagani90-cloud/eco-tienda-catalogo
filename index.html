@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Tienda Natural - Catálogo Digital</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f4f9f4',
+                            100: '#e3f2e4',
+                            200: '#c5e5c7',
+                            500: '#4CAF50',
+                            600: '#388E3C',
+                            700: '#2E7D32',
+                            800: '#1B5E20',
+                            900: '#0f3a13',
+                        },
+                        beige: {
+                            50: '#FAF6F0',
+                            100: '#F5EFE6',
+                            200: '#E8DFD1',
+                            300: '#D5C7B3',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-beige-50 text-gray-800 font-sans min-h-screen flex flex-col antialiased">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-brand-700 text-white text-xs sm:text-sm text-center py-2 px-4 flex items-center justify-center gap-2 font-medium">
+        <i data-lucide="truck" class="w-4 h-4">="inline"></i>
+        <span>Envíos en Rosario y Pueblo Esther | Entrega estimada: 7 a 10 días</span>
+    </div>
+
+    <!-- HEADER / NAVBAR -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md shadow-sm border-b border-beige-200">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <!-- Brand Logo / Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-brand-600 rounded-full flex items-center justify-center text-white shadow-md border-2 border-brand-500">
+                    <!-- SVG Leaf Icon matching logo -->
+                    <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                        <path d="M17,8C8,10 5,16 3,21C3,21 7,21 11,18C11,18 13,20 16,20C19,20 22,17 22,12C22,7 17,8 17,8M16,18C14,18 12.3,16.8 11.8,15.1C13.9,13.3 16.5,11.3 19.8,10.2C19.9,11.5 19.6,13.6 18.2,15.6C17.6,16.5 16.8,17.2 16,18Z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold text-brand-800 leading-none tracking-tight">eco tienda</h1>
+                    <span class="text-xs font-semibold text-brand-600 uppercase tracking-wider block mt-0.5">NATURAL • DIETÉTICA</span>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://instagram.com/eco.tiendanatural" target="_blank" class="p-2 text-pink-600 hover:bg-pink-50 rounded-full transition-colors hidden sm:flex items-center gap-1 text-sm font-semibold">
+                    <i data-lucide="instagram" class="w-5 h-5"></i>
+                    <span class="text-xs text-gray-600">@eco.tiendanatural</span>
+                </a>
+
+                <!-- WhatsApp Quick Button -->
+                <a href="https://wa.me/5493416857902" target="_blank" class="hidden md:flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold px-3 py-2 rounded-full transition-all shadow-sm">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span>Consultas</span>
+                </a>
+
+                <!-- Cart Trigger Button -->
+                <button id="openCartBtn" onclick="toggleCartModal(true)" class="relative bg-brand-700 hover:bg-brand-800 text-white px-4 py-2 rounded-full flex items-center gap-2 shadow-md hover:shadow-lg transition-all transform active:scale-95">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span class="font-bold text-sm hidden sm:inline">Mi Pedido</span>
+                    <span id="cartBadge" class="bg-amber-400 text-brand-900 font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center -mr-1 shadow-sm">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- SEARCH AND FILTER SECTION -->
+        <section class="mb-6 space-y-4">
+            <!-- Search Bar -->
+            <div class="relative max-w-2xl mx-auto">
+                <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Buscar fruto seco, harina, aceite, semillas..." class="w-full pl-11 pr-10 py-3.5 rounded-2xl border-2 border-beige-200 bg-white text-gray-800 placeholder-gray-400 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all text-base outline-none">
+                <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600 rounded-full">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Category Filter Pills (Horizontal Scrollable) -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+                <button onclick="setCategory('Todos')" class="cat-btn active bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shadow-sm transition-all hover:opacity-90">
+                    🌱 Todos
+                </button>
+                <button onclick="setCategory('Frutos Secos')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🥜 Frutos Secos
+                </button>
+                <button onclick="setCategory('Cereales y Avena')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🌾 Cereales y Avena
+                </button>
+                <button onclick="setCategory('Aceites')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🫒 Aceites
+                </button>
+                <button onclick="setCategory('Productos Varios')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🍯 Productos Varios
+                </button>
+                <button onclick="setCategory('Legumbres')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🫘 Legumbres
+                </button>
+                <button onclick="setCategory('Frutas Desecadas')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🫐 Frutas Desecadas
+                </button>
+                <button onclick="setCategory('Harinas')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🥖 Harinas
+                </button>
+                <button onclick="setCategory('Semillas')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🌻 Semillas
+                </button>
+                <button onclick="setCategory('Yerba')" class="cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all">
+                    🧉 Yerba
+                </button>
+            </div>
+        </section>
+
+        <!-- RESULTS INFO -->
+        <div class="flex items-center justify-between mb-4 px-1">
+            <span id="resultsCount" class="text-xs sm:text-sm font-medium text-gray-500">Cargando catálogo...</span>
+            <span class="text-xs text-amber-800 bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-md font-medium">
+                Precios Octubre 2026
+            </span>
+        </div>
+
+        <!-- PRODUCT GRID -->
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
+            <!-- Dynamic Content loaded by JavaScript -->
+        </div>
+
+        <!-- NO RESULTS MESSAGE -->
+        <div id="noResults" class="hidden text-center py-12 bg-white rounded-2xl border border-dashed border-beige-300 my-4">
+            <i data-lucide="package-x" class="w-12 h-12 text-gray-300 mx-auto mb-3"></i>
+            <h3 class="text-lg font-bold text-gray-700">No encontramos productos</h3>
+            <p class="text-sm text-gray-500 mt-1">Intenta buscar con otra palabra o borra los filtros.</p>
+            <button onclick="resetFilters()" class="mt-4 bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-xl hover:bg-brand-700 transition-colors">
+                Ver todos los productos
+            </button>
+        </div>
+    </main>
+
+    <!-- FLOATING CART / WHATSAPP ACTION BAR (MOBILE) -->
+    <div id="floatingCartBar" class="fixed bottom-4 left-4 right-4 z-20 bg-brand-800 text-white rounded-2xl shadow-2xl p-3 flex items-center justify-between transition-all transform translate-y-28 opacity-0 duration-300">
+        <div class="flex items-center gap-3 pl-2">
+            <div class="relative">
+                <i data-lucide="shopping-bag" class="w-6 h-6 text-amber-300"></i>
+                <span id="floatingBadge" class="absolute -top-2 -right-2 bg-amber-400 text-brand-900 font-extrabold text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+            </div>
+            <div>
+                <p class="text-xs text-brand-200 uppercase font-semibold">Total estimado</p>
+                <p id="floatingTotal" class="text-base font-bold text-white">$0</p>
+            </div>
+        </div>
+        <button onclick="toggleCartModal(true)" class="bg-amber-400 hover:bg-amber-300 text-brand-900 font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 transition-colors">
+            <span>Ver Pedido</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+    </div>
+
+    <!-- CART & CHECKOUT MODAL DRAWER -->
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="cartDrawer" class="bg-beige-50 w-full max-w-md h-full shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
+            
+            <!-- Modal Header -->
+            <div class="p-4 bg-brand-800 text-white flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 text-amber-300"></i>
+                    <h2 class="font-bold text-lg">Tu Pedido</h2>
+                </div>
+                <button onclick="toggleCartModal(false)" class="p-1 hover:bg-brand-700 rounded-lg transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Cart Items List -->
+            <div id="cartItemsContainer" class="flex-grow overflow-y-auto p-4 space-y-3">
+                <!-- Cart items will be rendered here -->
+            </div>
+
+            <!-- Empty Cart State -->
+            <div id="emptyCartView" class="flex-grow flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-20 h-20 bg-beige-200 rounded-full flex items-center justify-center text-gray-400 mb-4">
+                    <i data-lucide="shopping-bag" class="w-10 h-10"></i>
+                </div>
+                <h3 class="font-bold text-lg text-gray-700">Tu carrito está vacío</h3>
+                <p class="text-sm text-gray-500 mt-1 max-w-xs">Explora el catálogo y agrega tus frutos secos, harinas o semillas favoritas.</p>
+                <button onclick="toggleCartModal(false)" class="mt-6 bg-brand-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl hover:bg-brand-800 transition-colors">
+                    Explorar Productos
+                </button>
+            </div>
+
+            <!-- Checkout Form & Summary (Visible when items exist) -->
+            <div id="cartCheckoutSection" class="hidden border-t border-beige-200 bg-white p-4 space-y-4 shadow-lg">
+                <!-- Order Total -->
+                <div class="flex items-center justify-between text-base font-bold text-gray-800 pb-2 border-b border-gray-100">
+                    <span>Total Aproximado:</span>
+                    <span id="cartTotal" class="text-xl text-brand-700">$0</span>
+                </div>
+
+                <!-- Customer Info Form -->
+                <form id="orderForm" onsubmit="sendOrderViaWhatsApp(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Nombre Completo *</label>
+                        <input type="text" id="custName" required placeholder="Ej: María García" class="w-full px-3 py-2 text-sm border border-beige-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Zona / Dirección de Entrega *</label>
+                        <select id="custLocation" required class="w-full px-3 py-2 text-sm border border-beige-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none bg-white">
+                            <option value="">Selecciona tu localidad...</option>
+                            <option value="Rosario">Rosario</option>
+                            <option value="Pueblo Esther">Pueblo Esther</option>
+                            <option value="General Lagos">General Lagos</option>
+                            <option value="Arroyo Seco">Arroyo Seco</option>
+                            <option value="Otra Zona">Otra Zona (Consultar)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Aclaraciones o Notas (Opcional)</label>
+                        <textarea id="custNotes" rows="2" placeholder="Ej: Entregar por la tarde..." class="w-full px-3 py-2 text-sm border border-beige-300 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all transform active:scale-95">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                        <span>Enviar Pedido por WhatsApp</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-900 text-brand-100 mt-12 py-8 border-t border-brand-800 text-sm">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <h3 class="font-bold text-white text-base mb-2">Eco Tienda Natural</h3>
+                <p class="text-brand-200 text-xs leading-relaxed">
+                    Alimentación consciente y saludable. Venta de frutos secos, harinas, semillas, aceites y productos de dietética en Rosario y Pueblo Esther.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm mb-2">Contacto & Envíos</h4>
+                <ul class="text-xs space-y-1.5 text-brand-200">
+                    <li>📱 WhatsApp: 341 685-7902 / 340 265-7421</li>
+                    <li>📷 Instagram: @eco.tiendanatural</li>
+                    <li>⏱️ Tiempo de entrega estimado: 7 a 10 días</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-white text-sm mb-2">Información Importante</h4>
+                <p class="text-xs text-brand-200 leading-relaxed">
+                    Lista de precios actualizada a Octubre 2026. Los precios están sujetos a modificación sin previo aviso. Venta sujeta a disponibilidad de stock.
+                </p>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 mt-6 pt-4 border-t border-brand-800 text-center text-xs text-brand-300">
+            © 2026 Eco Tienda Natural - Catálogo Digital Interactivo
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT APP LOGIC -->
+    <script>
+        // --- DATASET: RAW PRODUCTS FROM PDF ---
+        const PRODUCTS = [
+            // FRUTOS SECOS
+            { id: 1, name: "Almendras Guaras", category: "Frutos Secos", price1kg: 23800, priceHalf: 13100, unitOnly: false, img: "https://images.unsplash.com/photo-1508061252966-1772183c5005?w=500&q=80" },
+            { id: 2, name: "Almendras Non Parlei (Alargadas)", category: "Frutos Secos", price1kg: 30000, priceHalf: 16500, unitOnly: false, img: "https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?w=500&q=80" },
+            { id: 3, name: "Castañas de Cajú", category: "Frutos Secos", price1kg: 20000, priceHalf: 11000, unitOnly: false, img: "https://images.unsplash.com/photo-1543208541-005dd2419953?w=500&q=80" },
+            { id: 4, name: "Maní Pelado con Sal", category: "Frutos Secos", price1kg: 3800, priceHalf: 2100, unitOnly: false, img: "https://images.unsplash.com/photo-1567892560267-0848db99574b?w=500&q=80" },
+            { id: 5, name: "Maní Pelado sin Sal", category: "Frutos Secos", price1kg: 3800, priceHalf: 2100, unitOnly: false, img: "https://images.unsplash.com/photo-1567892560267-0848db99574b?w=500&q=80" },
+            { id: 6, name: "Mix Cervecero", category: "Frutos Secos", price1kg: 10300, priceHalf: 5700, unitOnly: false, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+            { id: 7, name: "Mix con Arándanos", category: "Frutos Secos", price1kg: 15700, priceHalf: 8600, unitOnly: false, img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=500&q=80" },
+            { id: 8, name: "Mix Europeo con Pasas", category: "Frutos Secos", price1kg: 11700, priceHalf: 6400, unitOnly: false, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+            { id: 9, name: "Mix Europeo sin Pasas", category: "Frutos Secos", price1kg: 15700, priceHalf: 8600, unitOnly: false, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+            { id: 10, name: "Mix Tropical Económico", category: "Frutos Secos", price1kg: 9800, priceHalf: 5400, unitOnly: false, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+            { id: 11, name: "Mix Premium", category: "Frutos Secos", price1kg: 23800, priceHalf: 13100, unitOnly: false, img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500&q=80" },
+            { id: 12, name: "Mix Salado", category: "Frutos Secos", price1kg: 10500, priceHalf: 5800, unitOnly: false, img: "https://images.unsplash.com/photo-1567892560267-0848db99574b?w=500&q=80" },
+            { id: 13, name: "Nuez Partida", category: "Frutos Secos", price1kg: 18800, priceHalf: 10400, unitOnly: false, img: "https://images.unsplash.com/photo-1558223616-1f74fa13f412?w=500&q=80" },
+            { id: 14, name: "Nuez Mariposa Blanca", category: "Frutos Secos", price1kg: 20000, priceHalf: 11000, unitOnly: false, img: "https://images.unsplash.com/photo-1558223616-1f74fa13f412?w=500&q=80" },
+            { id: 15, name: "Nueces Pecán", category: "Frutos Secos", price1kg: 31900, priceHalf: 17600, unitOnly: false, img: "https://images.unsplash.com/photo-1558223616-1f74fa13f412?w=500&q=80" },
+
+            // CEREALES Y AVENA
+            { id: 16, name: "Aritos Frutados", category: "Cereales y Avena", price1kg: 8200, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 17, name: "Aritos de Miel", category: "Cereales y Avena", price1kg: 8200, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 18, name: "Avena Instantánea", category: "Cereales y Avena", price1kg: 2200, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&q=80" },
+            { id: 19, name: "Almohaditas (Frutilla/Avellana/Limón)", category: "Cereales y Avena", price1kg: 8800, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 20, name: "Almohaditas (Banana/Coco)", category: "Cereales y Avena", price1kg: 12500, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 21, name: "Almohaditas de Chocolate", category: "Cereales y Avena", price1kg: 9900, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 22, name: "Copos de Maíz con Azúcar", category: "Cereales y Avena", price1kg: 5800, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 23, name: "Copos de Maíz sin Azúcar", category: "Cereales y Avena", price1kg: 5300, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1521483451569-e33803c0330c?w=500&q=80" },
+            { id: 24, name: "Granola Tradicional", category: "Cereales y Avena", price1kg: 12500, priceHalf: 6900, unitOnly: false, img: "https://images.unsplash.com/photo-1517093725432-a9186427e5a7?w=500&q=80" },
+            { id: 25, name: "Granola con Chocolate", category: "Cereales y Avena", price1kg: 17000, priceHalf: 9400, unitOnly: false, img: "https://images.unsplash.com/photo-1517093725432-a9186427e5a7?w=500&q=80" },
+            { id: 26, name: "Granola Crocante Frutos Rojos", category: "Cereales y Avena", price1kg: 17000, priceHalf: 9400, unitOnly: false, img: "https://images.unsplash.com/photo-1517093725432-a9186427e5a7?w=500&q=80" },
+            { id: 27, name: "Granola sin Azúcar", category: "Cereales y Avena", price1kg: 17000, priceHalf: 9400, unitOnly: false, img: "https://images.unsplash.com/photo-1517093725432-a9186427e5a7?w=500&q=80" },
+
+            // ACEITES
+            { id: 28, name: "Aceite de Coco Neutro x 360cc", category: "Aceites", price1kg: 5300, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&q=80" },
+            { id: 29, name: "Aceite de Coco Virgen x 360cc", category: "Aceites", price1kg: 6300, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&q=80" },
+            { id: 30, name: "Aceite Oliva Extra Virgen Las Riojanas x 1L", category: "Aceites", price1kg: 9300, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80" },
+            { id: 31, name: "Aceite Oliva Extra Virgen Oleovares 2L", category: "Aceites", price1kg: 20700, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=500&q=80" },
+
+            // PRODUCTOS VARIOS
+            { id: 32, name: "Aceitunas Negras x 660g", category: "Productos Varios", price1kg: 8500, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1563822249510-04678c78fa85?w=500&q=80" },
+            { id: 33, name: "Aceitunas Verdes x 660g", category: "Productos Varios", price1kg: 6700, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1563822249510-04678c78fa85?w=500&q=80" },
+            { id: 34, name: "Azúcar Mascabo", category: "Productos Varios", price1kg: 5300, priceHalf: 2900, unitOnly: false, img: "https://images.unsplash.com/photo-1581441363689-1f3c3c414635?w=500&q=80" },
+            { id: 35, name: "Chipá Congelados (12 unid.)", category: "Productos Varios", price1kg: 6900, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1598142920555-3331336495f8?w=500&q=80" },
+            { id: 36, name: "Dulce de Leche sin Azúcar x 400g", category: "Productos Varios", price1kg: 7800, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&q=80" },
+            { id: 37, name: "Miel Pura 1 kg / ½ kg", category: "Productos Varios", price1kg: 10900, priceHalf: 6300, unitOnly: false, img: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=500&q=80" },
+            { id: 38, name: "Pasta de Maní Entrenuts Cookies 380g", category: "Productos Varios", price1kg: 4800, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80" },
+            { id: 39, name: "Pasta de Maní sin Azúcar 380g", category: "Productos Varios", price1kg: 3300, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80" },
+
+            // LEGUMBRES
+            { id: 40, name: "Arroz Yamaní", category: "Legumbres", price1kg: 2500, priceHalf: 1400, unitOnly: false, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500&q=80" },
+            { id: 41, name: "Garbanzos", category: "Legumbres", price1kg: 1900, priceHalf: 1100, unitOnly: false, img: "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=500&q=80" },
+            { id: 42, name: "Lentejas", category: "Legumbres", price1kg: 3000, priceHalf: 1700, unitOnly: false, img: "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?w=500&q=80" },
+            { id: 43, name: "Pistachos con Cáscara", category: "Legumbres", price1kg: 45000, priceHalf: 24800, unitOnly: false, img: "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&q=80" },
+
+            // FRUTAS DESECADAS
+            { id: 44, name: "Arándanos Pasas", category: "Frutas Desecadas", price1kg: 20000, priceHalf: 11000, unitOnly: false, img: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?w=500&q=80" },
+            { id: 45, name: "Ciruelas sin Carozo", category: "Frutas Desecadas", price1kg: 11900, priceHalf: 6600, unitOnly: false, img: "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?w=500&q=80" },
+            { id: 46, name: "Dátiles con Carozo", category: "Frutas Desecadas", price1kg: 10700, priceHalf: 5900, unitOnly: false, img: "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?w=500&q=80" },
+            { id: 47, name: "Pasas de Uva", category: "Frutas Desecadas", price1kg: 5300, priceHalf: 2900, unitOnly: false, img: "https://images.unsplash.com/photo-1596591606975-97ee5cef3a1e?w=500&q=80" },
+
+            // HARINAS
+            { id: 48, name: "Harina de Almendras Dicomere 200g", category: "Harinas", price1kg: 7900, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80" },
+            { id: 49, name: "Harina de Trigo Sarraceno 450g", category: "Harinas", price1kg: 3800, priceHalf: null, unitOnly: true, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80" },
+            { id: 50, name: "Harina Integral La Pícara", category: "Harinas", price1kg: 1800, priceHalf: 1000, unitOnly: false, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80" },
+            { id: 51, name: "Harina de Avena", category: "Harinas", price1kg: 2800, priceHalf: 1600, unitOnly: false, img: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&q=80" },
+
+            // SEMILLAS
+            { id: 52, name: "Mix de Semillas (Lino, Sésamo, Girasol)", category: "Semillas", price1kg: 3800, priceHalf: 2100, unitOnly: false, img: "https://images.unsplash.com/photo-1508061252966-1772183c5005?w=500&q=80" },
+            { id: 53, name: "Semillas de Chía", category: "Semillas", price1kg: 8200, priceHalf: 4500, unitOnly: false, img: "https://images.unsplash.com/photo-1508061252966-1772183c5005?w=500&q=80" },
+            { id: 54, name: "Semillas de Girasol", category: "Semillas", price1kg: 4000, priceHalf: 2200, unitOnly: false, img: "https://images.unsplash.com/photo-1508061252966-1772183c5005?w=500&q=80" },
+            { id: 55, name: "Semillas de Sésamo", category: "Semillas", price1kg: 4800, priceHalf: 2700, unitOnly: false, img: "https://images.unsplash.com/photo-1508061252966-1772183c5005?w=500&q=80" },
+
+            // YERBA
+            { id: 56, name: "Yerba Ajedrez Antiácida sin Palo", category: "Yerba", price1kg: 6500, priceHalf: 4500, unitOnly: false, img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80" }
+        ];
+
+        // --- APP STATE ---
+        let currentCategory = 'Todos';
+        let searchQuery = '';
+        let cart = []; // Format: { productId, variant: '1kg' | 'half' | 'unit', qty, price, name }
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            renderProducts();
+            updateCartUI();
+        });
+
+        // --- FILTER & SEARCH LOGIC ---
+        function setCategory(cat) {
+            currentCategory = cat;
+            
+            // Update active pill styling
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.innerText.includes(cat) || (cat === 'Todos' && btn.innerText.includes('Todos'))) {
+                    btn.className = "cat-btn active bg-brand-700 text-white px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap shadow-sm transition-all";
+                } else {
+                    btn.className = "cat-btn bg-white text-gray-700 border border-beige-200 hover:bg-beige-100 px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all";
+                }
+            });
+
+            renderProducts();
+        }
+
+        function filterProducts() {
+            const input = document.getElementById('searchInput');
+            searchQuery = input.value.toLowerCase().trim();
+            
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderProducts();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchQuery = '';
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderProducts();
+        }
+
+        function resetFilters() {
+            clearSearch();
+            setCategory('Todos');
+        }
+
+        // --- RENDER PRODUCTS GRID ---
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const noResults = document.getElementById('noResults');
+            const countLabel = document.getElementById('resultsCount');
+
+            // Filter Dataset
+            const filtered = PRODUCTS.filter(p => {
+                const matchesCat = (currentCategory === 'Todos') || (p.category === currentCategory);
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery) || p.category.toLowerCase().includes(searchQuery);
+                return matchesCat && matchesSearch;
+            });
+
+            countLabel.innerText = `Mostrando ${filtered.length} productos`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            // Render Product Cards
+            grid.innerHTML = filtered.map(product => {
+                const isUnit = product.unitOnly;
+
+                return `
+                <div class="bg-white rounded-2xl border border-beige-200 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden group">
+                    <!-- Image with Badge -->
+                    <div class="relative h-36 sm:h-44 bg-beige-100 overflow-hidden">
+                        <img src="${product.img}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <span class="absolute top-2 left-2 bg-white/90 backdrop-blur-md text-brand-800 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm">
+                            ${product.category}
+                        </span>
+                    </div>
+
+                    <!-- Details -->
+                    <div class="p-3 sm:p-4 flex flex-col flex-grow justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm sm:text-base leading-tight mb-2 group-hover:text-brand-700 transition-colors">
+                                ${product.name}
+                            </h3>
+                        </div>
+
+                        <!-- Pricing & Actions -->
+                        <div class="mt-3 pt-2 border-t border-beige-100 space-y-2">
+                            ${isUnit ? `
+                                <!-- Unit Price Only -->
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500 font-medium">Unidad / Pack</span>
+                                    <span class="text-base font-extrabold text-brand-700">$${product.price1kg.toLocaleString('es-AR')}</span>
+                                </div>
+                                <button onclick="addToCart(${product.id}, 'unit')" class="w-full bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-semibold text-xs py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    <span>Agregar</span>
+                                </button>
+                            ` : `
+                                <!-- Dual Option: 1kg or 1/2kg -->
+                                <div class="space-y-1.5">
+                                    <div class="flex items-center justify-between bg-beige-50 p-1.5 rounded-lg">
+                                        <span class="text-xs font-semibold text-gray-700">1 kg</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-bold text-brand-800">$${product.price1kg.toLocaleString('es-AR')}</span>
+                                            <button onclick="addToCart(${product.id}, '1kg')" class="bg-brand-600 hover:bg-brand-700 text-white p-1 rounded-md shadow-sm active:scale-90 transition-transform">
+                                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    ${product.priceHalf ? `
+                                    <div class="flex items-center justify-between bg-beige-50 p-1.5 rounded-lg">
+                                        <span class="text-xs font-semibold text-gray-700">½ kg</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs font-bold text-brand-800">$${product.priceHalf.toLocaleString('es-AR')}</span>
+                                            <button onclick="addToCart(${product.id}, 'half')" class="bg-brand-600 hover:bg-brand-700 text-white p-1 rounded-md shadow-sm active:scale-90 transition-transform">
+                                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        // --- CART OPERATIONS ---
+        function addToCart(productId, variant) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            let price = product.price1kg;
+            let variantLabel = 'Unidad';
+
+            if (variant === '1kg') {
+                price = product.price1kg;
+                variantLabel = '1 kg';
+            } else if (variant === 'half') {
+                price = product.priceHalf;
+                variantLabel = '½ kg';
+            }
+
+            const existingIndex = cart.findIndex(item => item.productId === productId && item.variant === variant);
+
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += 1;
+            } else {
+                cart.push({
+                    productId: product.id,
+                    name: product.name,
+                    variant: variant,
+                    variantLabel: variantLabel,
+                    price: price,
+                    qty: 1,
+                    img: product.img
+                });
+            }
+
+            updateCartUI();
+            
+            // Show subtle feedback
+            showToast(`¡Añadido ${product.name} (${variantLabel})!`);
+        }
+
+        function updateQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartBadge');
+            const floatingBadge = document.getElementById('floatingBadge');
+            const floatingBar = document.getElementById('floatingCartBar');
+            const floatingTotal = document.getElementById('floatingTotal');
+            const cartTotal = document.getElementById('cartTotal');
+            const container = document.getElementById('cartItemsContainer');
+            const emptyView = document.getElementById('emptyCartView');
+            const checkoutSec = document.getElementById('cartCheckoutSection');
+
+            const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+            // Badges
+            badge.innerText = totalItems;
+            floatingBadge.innerText = totalItems;
+            floatingTotal.innerText = `$${totalPrice.toLocaleString('es-AR')}`;
+            cartTotal.innerText = `$${totalPrice.toLocaleString('es-AR')}`;
+
+            // Floating Bottom Bar visibility
+            if (totalItems > 0) {
+                floatingBar.classList.remove('translate-y-28', 'opacity-0');
+            } else {
+                floatingBar.classList.add('translate-y-28', 'opacity-0');
+            }
+
+            // Render Modal List
+            if (cart.length === 0) {
+                container.innerHTML = '';
+                emptyView.classList.remove('hidden');
+                checkoutSec.classList.add('hidden');
+            } else {
+                emptyView.classList.add('hidden');
+                checkoutSec.classList.remove('hidden');
+
+                container.innerHTML = cart.map((item, idx) => `
+                    <div class="bg-white p-3 rounded-xl border border-beige-200 shadow-sm flex items-center justify-between gap-3">
+                        <img src="${item.img}" class="w-12 h-12 rounded-lg object-cover bg-beige-100 flex-shrink-0">
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-bold text-xs text-gray-800 truncate">${item.name}</h4>
+                            <span class="inline-block bg-beige-100 text-brand-800 text-[10px] font-bold px-2 py-0.5 rounded mt-0.5">
+                                ${item.variantLabel}
+                            </span>
+                            <div class="text-xs font-semibold text-gray-600 mt-1">
+                                $${(item.price * item.qty).toLocaleString('es-AR')}
+                            </div>
+                        </div>
+
+                        <!-- Quantity Controls -->
+                        <div class="flex items-center gap-1.5 bg-beige-50 border border-beige-200 rounded-lg p-1">
+                            <button onclick="updateQty(${idx}, -1)" class="w-6 h-6 bg-white hover:bg-beige-200 text-gray-700 rounded font-bold flex items-center justify-center shadow-xs">
+                                -
+                            </button>
+                            <span class="text-xs font-bold text-gray-800 w-4 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${idx}, 1)" class="w-6 h-6 bg-brand-600 hover:bg-brand-700 text-white rounded font-bold flex items-center justify-center shadow-xs">
+                                +
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            lucide.createIcons();
+        }
+
+        function toggleCartModal(open) {
+            const modal = document.getElementById('cartModal');
+            const drawer = document.getElementById('cartDrawer');
+
+            if (open) {
+                modal.classList.remove('pointer-events-none', 'opacity-0');
+                drawer.classList.remove('translate-x-full');
+            } else {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                drawer.classList.add('translate-x-full');
+            }
+        }
+
+        // --- WHATSAPP ORDER SUBMISSION ---
+        function sendOrderViaWhatsApp(e) {
+            e.preventDefault();
+
+            if (cart.length === 0) return;
+
+            const name = document.getElementById('custName').value.trim();
+            const location = document.getElementById('custLocation').value;
+            const notes = document.getElementById('custNotes').value.trim();
+
+            const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+            // Format message
+            let msg = `🌿 *NUEVO PEDIDO - ECO TIENDA NATURAL*\n`;
+            msg += `------------------------------------\n`;
+            msg += `👤 *Cliente:* ${name}\n`;
+            msg += `📍 *Zona:* ${location}\n`;
+            if (notes) msg += `📝 *Notas:* ${notes}\n`;
+            msg += `------------------------------------\n\n`;
+            msg += `🛒 *DETALLE DEL PEDIDO:*\n`;
+
+            cart.forEach((item, i) => {
+                const subtotal = item.price * item.qty;
+                msg += `${i + 1}. ${item.name} (${item.variantLabel}) x${item.qty} = $${subtotal.toLocaleString('es-AR')}\n`;
+            });
+
+            msg += `\n💰 *TOTAL ESTIMADO: $${totalPrice.toLocaleString('es-AR')}*\n`;
+            msg += `------------------------------------\n`;
+            msg += `*Lista de Precios Octubre 2026*`;
+
+            // Encode for URL and send to default WhatsApp (3416857902)
+            const encodedMsg = encodeURIComponent(msg);
+            const waUrl = `https://wa.me/5493416857902?text=${encodedMsg}`;
+
+            window.open(waUrl, '_blank');
+        }
+
+        // --- TOAST NOTIFICATION FEEDBACK ---
+        function showToast(text) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-20 right-4 z-50 bg-brand-800 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-brand-600 transition-all transform translate-y-[-10px] opacity-0';
+            toast.innerText = text;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-10px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
